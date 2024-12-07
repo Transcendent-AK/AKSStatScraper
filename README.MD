@@ -1,7 +1,13 @@
 # How to use it
 - pip install -r ./requirements.txt  
-* it may have more packages than really is required since its not in a venv but in my machine :hmm:
 - after that just do python ./scrapeStatus.py
 
 # Why was it made?
 - So was easier to yoink it to eidosite.test
+
+# requirements
+- Pandas (for easier managment of the table)
+- BeautifulSoup (for extracting the HTML)
+- lxml (for extracting the xpath of the eidons)
+- requests (for python be able to make get requests)
+- json (for the conversion of what i want from the table)

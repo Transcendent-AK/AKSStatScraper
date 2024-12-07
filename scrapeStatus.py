@@ -1,9 +1,9 @@
 import requests
-import time as t
 from bs4 import BeautifulSoup
 from lxml import etree
 import pandas as pd
 import json
+import re
 
 
 def scrapEidos(url):
@@ -17,6 +17,17 @@ def scrapEidos(url):
     for i in eido:
         urlSaver.append("https://www.aurakingdom-db.com"+i)
     return urlSaver
+
+
+def separate_stats(stats_string):
+    stats_dict = {}
+    stats = re.findall(r"(\w+) \+(\d+)", stats_string.lower())
+    for stat, value in stats:
+        stats_dict[stat] = int(value)
+    return stats_dict
+
+    separated_stats = separate_stats(stats_dict)
+    print(separated_stats)
 
 
 def scrapStats(urlEidos):
@@ -38,16 +49,36 @@ def scrapStats(urlEidos):
         # Using this to save eido name extracted from the URL
         eido_name = soup.find('h1').text.strip()
         # eido_name = url.split('/')[-1]
-        # Add eido name to dataframe
+        # Add eido name, Wish and Level to dataframe for easier manipulation
         df['Eido Name'] = eido_name
+        df['wish'] = df['Wish']
         # This converts the table to csv
         # df.to_csv(f"eido_stats_{url.split('/')[-1]}.csv", index=False)
 
+        new_df = pd.DataFrame(columns=['eido_name', 'wish'])
+        new_df['eido_name'] = eido_name
+        new_df['wish'] = df[['Level', 'Wish']].to_dict('records')
+
         # This converts the table to json
-        json_data = df.to_json(orient='records')
+        # json_data = df.to_json(orient='records')
+
+        grouped_df = df.groupby('Eido Name')
+        for name, group in grouped_df:
+            eido_data = {
+                "eido_name": name,
+                "wishes": []
+            }
+            for index, row in group.iterrows():
+                wish_data = {
+                    "wish_number": row['Wish'],
+                    "level": row['Level'],
+                    "stats": separate_stats(row['Stats'])
+                }
+                eido_data['wishes'].append(wish_data)
+            all_eidos_data.append(eido_data)
 
         # Append all eidos to one json
-        all_eidos_data.extend(json.loads(json_data))
+        # all_eidos_data.extend(json.loads(json_data))
         # Save all eidos into one json
         with open('all_eidos_stats.json', 'w') as f:
             json.dump(all_eidos_data, f, indent=4)
