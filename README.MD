@@ -3,7 +3,10 @@
 - after that just do python ./scrapeStatus.py
 
 # Why was it made?
-- So was easier to yoink it to eidosite.test the eido stats
+- So was easier to yoink it to eidosite.test
+
+# Why many commits?
+- From first commit to last commit we got json structure changes which was made after we saw the one we did first didn't met the requirements for what we were looking for
 
 # requirements
 - Pandas (for easier managment of the table)
