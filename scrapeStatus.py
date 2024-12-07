@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 from lxml import etree
 import pandas as pd
+from io import StringIO
 import json
 import re
 
@@ -46,7 +47,7 @@ def scrapStats(urlEidos):
         table = soup.find('th', string='Wish').parent.parent.parent
 
         # Using pandas so it reads the html and fixes it in table to convert to json
-        df = pd.read_html(str(table))[0]
+        df = pd.read_html(StringIO(str(table)))[0]
         df = df.drop(columns=['Materials'])
         # Using this to save eido name extracted from the URL
         eido_name = soup.find('h1').text.strip()
