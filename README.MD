@@ -3,7 +3,7 @@
 - after that just do python ./scrapeStatus.py
 
 # Why was it made?
-- So was easier to yoink it to eidosite.test
+- So was easier to yoink it to eidosite.test the eido stats
 
 # requirements
 - Pandas (for easier managment of the table)
