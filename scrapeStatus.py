@@ -53,8 +53,6 @@ def scrapStats(urlEidos):
         # Add eido name, Wish and Level to dataframe for easier manipulation
         df['Eido Name'] = eido_name
         df['wish'] = df['Wish']
-        # This converts the table to csv
-        # df.to_csv(f"eido_stats_{url.split('/')[-1]}.csv", index=False)
 
         new_df = pd.DataFrame(columns=['eido_name', 'wish'])
         new_df['eido_name'] = eido_name
