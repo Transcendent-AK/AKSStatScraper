@@ -34,8 +34,10 @@ def scrapStats(urlEidos):
 
         # Using pandas so it reads the html and fixes it in table to convert to json
         df = pd.read_html(str(table))[0]
+        df = df.drop(columns=['Materials'])
         # Using this to save eido name extracted from the URL
-        eido_name = url.split('/')[-1]
+        eido_name = soup.find('h1').text.strip()
+        # eido_name = url.split('/')[-1]
         # Add eido name to dataframe
         df['Eido Name'] = eido_name
         # This converts the table to csv
