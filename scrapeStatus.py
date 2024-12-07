@@ -20,6 +20,8 @@ def scrapEidos(url):
 
 
 def separate_stats(stats_string):
+    # This will separate the stats from each other and lower casering casering
+    # the stats names
     stats_dict = {}
     stats = re.findall(r"(\w+) \+(\d+)", stats_string.lower())
     for stat, value in stats:
@@ -48,7 +50,6 @@ def scrapStats(urlEidos):
         df = df.drop(columns=['Materials'])
         # Using this to save eido name extracted from the URL
         eido_name = soup.find('h1').text.strip()
-        # eido_name = url.split('/')[-1]
         # Add eido name, Wish and Level to dataframe for easier manipulation
         df['Eido Name'] = eido_name
         df['wish'] = df['Wish']
@@ -59,9 +60,7 @@ def scrapStats(urlEidos):
         new_df['eido_name'] = eido_name
         new_df['wish'] = df[['Level', 'Wish']].to_dict('records')
 
-        # This converts the table to json
-        # json_data = df.to_json(orient='records')
-
+        # This set the new structure of the json
         grouped_df = df.groupby('Eido Name')
         for name, group in grouped_df:
             eido_data = {
@@ -75,18 +74,14 @@ def scrapStats(urlEidos):
                     "stats": separate_stats(row['Stats'])
                 }
                 eido_data['wishes'].append(wish_data)
+            # Append all eidos to one json
             all_eidos_data.append(eido_data)
 
-        # Append all eidos to one json
-        # all_eidos_data.extend(json.loads(json_data))
         # Save all eidos into one json
         with open('all_eidos_stats.json', 'w') as f:
             json.dump(all_eidos_data, f, indent=4)
         # Prints te result when all eidos stats were extracted
         print("All eido stats extracted and combined!")
-
-        # Same but for each eido
-        # print(f"Stats for {url.split('/')[-1]} extracted!")
 
 
 if __name__ == '__main__':
